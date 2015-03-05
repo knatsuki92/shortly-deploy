@@ -88,6 +88,10 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: 'node server.js'
+      },
+      deployment: {
+        command: ''
       }
     },
   });
@@ -122,19 +126,19 @@ module.exports = function(grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build', ['test', 'jshint', 'concat', 'uglify', 'cssmin'
   ]);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
-      // add your production server task here
+      grunt.task.run(['build', 'shell:prodServer']);
     } else {
       grunt.task.run([ 'server-dev' ]);
+
     }
   });
 
-  grunt.registerTask('deploy', [
-    // add your deploy tasks here
+  grunt.registerTask('deploy', [ 'build'
   ]);
 
 
