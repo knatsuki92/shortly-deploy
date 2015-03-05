@@ -2,7 +2,15 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
     concat: {
+      options: {
+        separator: ';'
+      },
+      dist: {
+        src: ['public/client/*.js'],
+        dest: 'public/dist/<%= pkg.name %>.js'
+      }
     },
 
     mochaTest: {
@@ -21,10 +29,25 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+      },
+      dist: {
+        files: {
+          'public/dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+        }
+      }
     },
 
     jshint: {
       files: [
+        'Gruntfile.js',
+        'server.js',
+        'server-config.js',
+        'test/*.js',
+        'public/client/*.js',
+        'app/**/*.js',
+        'lib/*.js',
         // Add filespec list here
       ],
       options: {
@@ -38,6 +61,12 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+      target: {
+        files: [{
+          src: ['public/style.css'],
+          dest: 'public/dist/style.min.css',
+        }]
+      }
     },
 
     watch: {
