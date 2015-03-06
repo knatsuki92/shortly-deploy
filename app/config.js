@@ -8,67 +8,68 @@ var db = Mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
   console.log('yay!');
+});
   // yay!
-  var Schema = Mongoose.Schema;
+  // var Schema = Mongoose.Schema;
 
-  var urls = new Schema({
-    url:  String,
-    base_url: String,
-    code:   String,
-    title:  String,
-    visits: Number
-    // timestamp?
-    // note: _id
-  });
+  // var urls = new Schema({
+  //   url:  String,
+  //   base_url: String,
+  //   code:   String,
+  //   title:  String,
+  //   visits: Number
+  //   // timestamp?
+  //   // note: _id
+  // });
 
-  var users = new Schema({
-    username:  String,
-    password: String
-    // timestamp?
-    // note: _id
-  });
+  // var users = new Schema({
+  //   username:  String,
+  //   password: String
+  //   // timestamp?
+  //   // note: _id
+  // });
 
-  users.on('init', function (model) {
-    model.hashPassword();
-  });
+  // users.on('init', function (model) {
+  //   model.hashPassword();
+  // });
 
-  users.methods.comparePassword = function(attemptedPassword, callback) {
-    bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
-      callback(isMatch);
-    });
+  // users.methods.comparePassword = function(attemptedPassword, callback) {
+  //   bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
+  //     callback(isMatch);
+  //   });
 
-  users.methods.hashPassword = function(){
-      var cipher = Promise.promisify(bcrypt.hash);
-      return cipher(this.password, null, null).bind(this)
-        .then(function(hash) {
-          this.password = hash;
-        });
-    };
+  // users.methods.hashPassword = function(){
+  //     var cipher = Promise.promisify(bcrypt.hash);
+  //     return cipher(this.password, null, null).bind(this)
+  //       .then(function(hash) {
+  //         this.password = hash;
+  //       });
+  //   };
 
   // var Users = Mongoose.model('Users', users);
   // var silence = new Users({ username: 'Silence', password: 'password' });
   // silence.save();
 
-  var Urls = db.model('Urls', urls);
-  var google = new Urls({
-    url: '',
-    base_url: 'www.google.com',
-    code: 'asdfg',
-    title: 'get lucky!',
-    visits: 0
-  });
-  google.save();
+//   var Urls = db.model('Urls', urls);
+//   var google = new Urls({
+//     url: '',
+//     base_url: 'www.google.com',
+//     code: 'asdfg',
+//     title: 'get lucky!',
+//     visits: 0
+//   });
+//   google.save();
 
-  var googl = new Urls({
-    url: '',
-    base_url: 'www.googl.com',
-    code: 'asdfg',
-    title: 'get lucky!',
-    visits: 0
-  });
-  googl.save();
+//   var googl = new Urls({
+//     url: '',
+//     base_url: 'www.googl.com',
+//     code: 'asdfg',
+//     title: 'get lucky!',
+//     visits: 0
+//   });
+//   googl.save();
 
-});
+// });
 
 // var db = Bookshelf.initialize({
 //   client: 'sqlite3',

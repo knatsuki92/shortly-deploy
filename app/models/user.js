@@ -1,13 +1,46 @@
+var Mongoose = require('mongoose');
 var db = require('../config');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
-var User = db.model('User', users);
-// var silence = new User({ username: 'Silence', password: 'password' });
-  // silence.save();
-  //
+ var users = new Mongoose.Schema({
+    username:  {type: String, unique: true},
+    password: String
+    // timestamp?
+    // note: _id
+  });
 
 
+users.methods.comparePassword = function(attemptedPassword, callback) {
+  console.log('password', this.password);
+  console.log('attemptedPassword', attemptedPassword);
+  bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
+    callback(isMatch);
+  });
+};
+
+users.methods.hashPassword = function(next){
+  var cipher = Promise.promisify(bcrypt.hash);
+  return cipher(this.password, null, null).bind(this)
+    .then(function(hash) {
+      this.password = hash;
+      next();
+    });
+};
+
+users.pre('save', function(next){
+  users.methods.hashPassword.apply(this, arguments);
+});
+
+// users.pre('save', function(next){
+//   var cipher = Promise.promisify(bcrypt.hash);
+//   return cipher(this.password, null, null).bind(this)
+//     .then(function(hash) {
+//       this.password = hash;
+//       next();
+//     });
+
+// });
 
 // var User = db.Model.extend({
 //   tableName: 'users',
@@ -29,4 +62,5 @@ var User = db.model('User', users);
 //   }
 // });
 
+var User = Mongoose.model('User', users);
 module.exports = User;
