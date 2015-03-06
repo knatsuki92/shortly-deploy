@@ -3,7 +3,7 @@ var path = require('path');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
-Mongoose.connect('mongodb://localhost/shortlyDB1');
+Mongoose.connect('mongodb://MongoLab-4:q2g2ptFshyDZfjZhnR9ze9QBqWUFwdXExn3Q3HdP3aA-@ds048537.mongolab.com:48537/MongoLab-4');
 var db = Mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
